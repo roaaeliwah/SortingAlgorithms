@@ -1,35 +1,36 @@
 package algorithms;
 
-public class SelectionSort {
-    int comparisons = 0;
-    int interchanges = 0;
-    int[] arr;
+public class SelectionSort implements SortingAlgorithm{
+    long comparisons = 0;
+    long interchanges = 0;
 
-    public int getComparisons() {
+    @Override
+    public long getComparisons() {
         return comparisons;
     }
-    public  int getInterchanges() {
+
+    @Override
+    public long getInterchanges() {
         return interchanges;
     }
 
-    public SelectionSort(int[] arr) {
-        this.arr = arr;
-    }
-
-    public void sort() {
-        for(int i=0; i<arr.length-1; i++) {
+    @Override
+    public void sort(int[] arr) {
+        comparisons = 0;
+        interchanges = 0;
+        for (int i = 0; i < arr.length - 1; i++) {
             int min = i;
 
-            //to find minimum's index
-            for(int j = i+1; j<arr.length; j++) {
+            // to find minimum's index
+            for (int j = i + 1; j < arr.length; j++) {
                 comparisons++;
-                if(arr[j] < arr[min]) {
+                if (arr[j] < arr[min]) {
                     min = j;
                 }
             }
 
-            //to swap
-            if(min != i) {
+            // to swap
+            if (min != i) {
                 interchanges++;
                 int tmp = arr[i];
                 arr[i] = arr[min];

@@ -1,27 +1,28 @@
 package algorithms;
 
-public class HeapSort {
-    int comparisons = 0;
-    int interchanges = 0;
-    int[] arr;
+public class HeapSort implements  SortingAlgorithm {
+    long comparisons = 0;
+    long interchanges = 0;
 
-    public int getComparisons() {
+    @Override
+    public long getComparisons() {
         return comparisons;
     }
-    public  int getInterchanges() {
+
+    @Override
+    public long getInterchanges() {
         return interchanges;
     }
 
-    public HeapSort(int[] arr) {
-        this.arr = arr;
-    }
-
-    public void sort() {
+    @Override
+    public void sort(int[] arr) {
+        comparisons = 0;
+        interchanges = 0;
         int n = arr.length;
 
         // Build heap (rearrange array)
         for (int i = n / 2 - 1; i >= 0; i--)
-            heapify(n, i);
+            heapify(n, i, arr);
 
         // One by one extract elements from heap
         for (int i = n - 1; i > 0; i--) {
@@ -32,16 +33,17 @@ public class HeapSort {
             interchanges++;
 
             // call max heapify on the reduced heap
-            heapify(i, 0);
+            heapify(i, 0, arr);
         }
     }
 
-    public  void heapify(int n, int i) {
+    public void heapify(int n, int i, int[] arr) {
         int largest = i; // Initialize largest as root
         int l = 2 * i + 1; // left = 2*i + 1
         int r = 2 * i + 2; // right = 2*i + 2
 
-        // If left child is larger than root and node has children (node's index is less than heap size)
+        // If left child is larger than root and node has children (node's index is less
+        // than heap size)
         if (l < n && arr[l] > arr[largest]) {
             comparisons++;
             largest = l;
@@ -61,7 +63,7 @@ public class HeapSort {
             interchanges++;
 
             // Recursively heapify the affected sub-tree
-            heapify(n, largest);
+            heapify(n, largest, arr);
         }
     }
 

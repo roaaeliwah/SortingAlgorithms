@@ -1,40 +1,41 @@
 package algorithms;
 
-public class QuickSort {
-    int comparisons = 0;
-    int interchanges = 0;
-    int[] arr;
+public class QuickSort implements SortingAlgorithm {
+    long comparisons = 0;
+    long interchanges = 0;
 
-    public int getComparisons() {
+    @Override
+    public long getComparisons() {
         return comparisons;
     }
-    public  int getInterchanges() {
+
+    @Override
+    public long getInterchanges() {
         return interchanges;
     }
 
-    public QuickSort(int[] arr) {
-        this.arr = arr;
+    @Override
+    public void sort(int[] arr) {
+        comparisons = 0;
+        interchanges = 0;
+        quickSort(0, arr.length - 1, arr);
     }
 
-    public void sort() {
-        quickSort(0, arr.length-1);
-    }
-
-    public void quickSort(int low, int high) {
-        if(low < high) {
-            int pi = partition(low, high);
-            quickSort(low, pi-1);
-            quickSort(pi+1, high);
+    public void quickSort(int low, int high, int[] arr) {
+        if (low < high) {
+            int pi = partition(low, high, arr);
+            quickSort(low, pi - 1, arr);
+            quickSort(pi + 1, high, arr);
         }
     }
 
-    public int partition(int low, int high) {
+    public int partition(int low, int high, int[] arr) {
         int pivot = arr[high];
-        int i = low-1;
+        int i = low - 1;
 
-        for(int j=low; j<high; j++) {
+        for (int j = low; j < high; j++) {
             comparisons++;
-            if(arr[j] < pivot) {
+            if (arr[j] < pivot) {
                 i++;
                 int temp = arr[i];
                 arr[i] = arr[j];
@@ -43,11 +44,11 @@ public class QuickSort {
             }
         }
 
-        int temp = arr[i+1];
-        arr[i+1] = arr[high];
+        int temp = arr[i + 1];
+        arr[i + 1] = arr[high];
         arr[high] = temp;
         interchanges++;
 
-        return i+1;
+        return i + 1;
     }
 }

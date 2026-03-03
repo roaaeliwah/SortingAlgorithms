@@ -1,35 +1,36 @@
 package algorithms;
 
-public class InsertionSort {
-    int comparisons = 0;
-    int interchanges = 0;
-    int[] arr;
+public class InsertionSort implements SortingAlgorithm {
+    long comparisons = 0;
+    long interchanges = 0;
 
-    public int getComparisons() {
+    @Override
+    public long getComparisons() {
         return comparisons;
     }
-    public  int getInterchanges() {
+
+    @Override
+    public long getInterchanges() {
         return interchanges;
     }
 
-    public InsertionSort(int[] arr) {
-        this.arr = arr;
-    }
-
-    public void sort() {
-        for(int i=1; i<arr.length; i++) {
+    @Override
+    public void sort(int[] arr) {
+        comparisons = 0;
+        interchanges = 0;
+        for (int i = 1; i < arr.length; i++) {
             int tmp = arr[i];
-            int j = i-1;
-            for(; j>=0; j--) {
+            int j = i - 1;
+            for (; j >= 0; j--) {
                 comparisons++;
-                if(arr[j] > tmp) {
+                if (arr[j] > tmp) {
                     interchanges++;
-                    arr[j+1] = arr[j];
+                    arr[j + 1] = arr[j];
                 } else {
                     break;
                 }
             }
-            arr[j+1] = tmp;
+            arr[j + 1] = tmp;
         }
     }
 }
