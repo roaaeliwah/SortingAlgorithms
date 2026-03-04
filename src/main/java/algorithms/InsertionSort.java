@@ -1,18 +1,6 @@
 package algorithms;
 
-public class InsertionSort implements SortingAlgorithm {
-    long comparisons = 0;
-    long interchanges = 0;
-
-    @Override
-    public long getComparisons() {
-        return comparisons;
-    }
-
-    @Override
-    public long getInterchanges() {
-        return interchanges;
-    }
+public class InsertionSort extends  AbstractSortingAlgo {
 
     @Override
     public void sort(int[] arr) {

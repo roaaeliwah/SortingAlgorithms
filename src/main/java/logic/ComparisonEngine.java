@@ -1,5 +1,6 @@
 package logic;
 
+import algorithms.AbstractSortingAlgo;
 import algorithms.SortingAlgorithm;
 import utils.ArrayGenerator;
 
@@ -19,7 +20,7 @@ public class ComparisonEngine {
         }
     }
 
-    private SortingAlgorithm  createSortingAlgorithm(String name) {
+    private AbstractSortingAlgo createSortingAlgorithm(String name) {
         switch (name.toLowerCase()) {
             case "bubble":
                 return new algorithms.BubbleSort();
@@ -39,7 +40,7 @@ public class ComparisonEngine {
     }
 
     public SortResult benchmark(String algorithmName, int size, int runs, int[] baseArray) {
-        SortingAlgorithm sorter = createSortingAlgorithm(algorithmName);
+        AbstractSortingAlgo sorter = createSortingAlgorithm(algorithmName);
         SortResult result = new SortResult();
 
         result.algorithmName = algorithmName;
