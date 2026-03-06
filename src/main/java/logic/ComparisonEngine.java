@@ -8,7 +8,7 @@ public class ComparisonEngine {
     private final ArrayGenerator generator = new ArrayGenerator();
 
     public int[] generate(int size, String type) {
-        switch(type.toLowerCase()) {
+        switch (type.toLowerCase()) {
             case "sorted":
                 return generator.generateSorted(size);
             case "reverse":
@@ -54,7 +54,7 @@ public class ComparisonEngine {
         long totalComparisons = 0;
         long totalInterchanges = 0;
 
-        for(int i=0; i<runs; i++) {
+        for (int i = 0; i < runs; i++) {
             int[] arrayCopy = baseArray.clone();
             long startTime = System.nanoTime();
             sorter.sort(arrayCopy);
@@ -69,9 +69,10 @@ public class ComparisonEngine {
             totalInterchanges += sorter.getInterchanges();
         }
 
-        result.averageRunningTime = totalTime / runs;
-        result.minRunningTime = minTime;
-        result.maxRunningTime = maxTime;
+        // convert nanoseconds to milliseconds for reporting
+        result.averageRunningTime = (totalTime / (double) runs) / 1_000_000.0;
+        result.minRunningTime = minTime / 1_000_000.0;
+        result.maxRunningTime = maxTime / 1_000_000.0;
         result.comparisons = totalComparisons / runs;
         result.interchanges = totalInterchanges / runs;
 
