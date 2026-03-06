@@ -19,7 +19,8 @@ plt.title("Sorting Runtime vs Array Size")
 plt.legend()
 plt.grid(True)
 
- #adjust 3000 to whatever max you want to show
+#plt.ylim(0, 0.05) 
+#adjust 3000 to whatever max you want to show
 
 plt.savefig("runtime_vs_size.png")
 plt.show()

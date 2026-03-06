@@ -17,16 +17,26 @@ public class SelectionSort extends AbstractSortingAlgorithm {
                 }
             }
 
+            // Move minimum element to its
+            // correct position
+            int temp = arr[i];
+            arr[i] = arr[min];
+            arr[min] = temp;
+            interchanges++;
+            // update visualization after swap
+            if (delayMs > 0)
+                pauseAndRender();
+
             // to swap
-            if (min != i) {
-                interchanges++;
-                int tmp = arr[i];
-                arr[i] = arr[min];
-                arr[min] = tmp;
-                // update visualization after swap
-                if (delayMs > 0)
-                    pauseAndRender();
-            }
+//            if (min != i) {
+//                interchanges++;
+//                int tmp = arr[i];
+//                arr[i] = arr[min];
+//                arr[min] = tmp;
+//                // update visualization after swap
+//                if (delayMs > 0)
+//                    pauseAndRender();
+//            }
         }
     }
 }
