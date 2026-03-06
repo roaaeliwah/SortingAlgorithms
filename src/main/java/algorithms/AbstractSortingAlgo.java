@@ -1,5 +1,7 @@
 package algorithms;
 
+import javax.swing.SwingUtilities;
+
 public abstract class AbstractSortingAlgo implements  SortingAlgorithm {
     long comparisons = 0;
     long interchanges = 0;
@@ -33,8 +35,8 @@ public abstract class AbstractSortingAlgo implements  SortingAlgorithm {
 
     protected void pauseAndRender() {
         if(onUpdate != null) {
-            // notifies gui that a change happened
-            onUpdate.run();
+            // notifies gui that a change happened - run on EDT for thread-safety
+            SwingUtilities.invokeLater(onUpdate);
         }
 
         // ensures it doesn't sleep during comparison and only during visualization

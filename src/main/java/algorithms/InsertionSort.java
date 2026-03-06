@@ -14,11 +14,13 @@ public class InsertionSort extends  AbstractSortingAlgo {
                 if (arr[j] > tmp) {
                     interchanges++;
                     arr[j + 1] = arr[j];
+                    pauseAndRender();
                 } else {
                     break;
                 }
             }
             arr[j + 1] = tmp;
+            pauseAndRender();
         }
     }
 }

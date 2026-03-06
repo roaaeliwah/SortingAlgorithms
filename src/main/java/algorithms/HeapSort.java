@@ -19,6 +19,7 @@ public class HeapSort extends AbstractSortingAlgo {
             arr[0] = arr[i];
             arr[i] = temp;
             interchanges++;
+            pauseAndRender();
 
             // call max heapify on the reduced heap
             heapify(i, 0, arr);
@@ -49,6 +50,7 @@ public class HeapSort extends AbstractSortingAlgo {
             arr[i] = arr[largest];
             arr[largest] = swap;
             interchanges++;
+            pauseAndRender();
 
             // Recursively heapify the affected sub-tree
             heapify(n, largest, arr);

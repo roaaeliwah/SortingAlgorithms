@@ -1,5 +1,10 @@
 package gui;
 
+import algorithms.SortingAlgorithm;
+import logic.ComparisonEngine;
+import utils.SortVisualizer;
+import utils.SorterFactory;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,6 +15,11 @@ public class VisualizationPanel extends JPanel {
     private JLabel statsLabel;
     private JComboBox<String> arrayTypeCombo;
     private JTextField sizeField;
+    private Thread sortThread;
+    private ComparisonEngine engine = new ComparisonEngine();
+    private int[] array;
+    private SorterFactory sorterFactory = new SorterFactory();
+    private SortVisualizer visualizer = new SortVisualizer();
 
     public VisualizationPanel() {
         setLayout(new BorderLayout());
@@ -40,7 +50,7 @@ public class VisualizationPanel extends JPanel {
         row2.add(sizeField);
 
         startButton = new JButton("Start Visualization");
-//        startButton.addActionListener(e -> startVisualization());
+        startButton.addActionListener(e -> startVisualization());
         row2.add(startButton);
 
         topPanel.add(row1);
@@ -49,8 +59,8 @@ public class VisualizationPanel extends JPanel {
         add(topPanel, BorderLayout.NORTH);
 
         // Center Drawing Panel
-//        visualizer = new SortVisualizer();
-//        add(visualizer, BorderLayout.CENTER);
+         visualizer = new SortVisualizer();
+         add(visualizer, BorderLayout.CENTER);
 
         // Bottom Stats Panel
         JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -60,5 +70,66 @@ public class VisualizationPanel extends JPanel {
         add(statsPanel, BorderLayout.SOUTH);
 
         // Initialize with default array
+    }
+
+    private void startVisualization() {
+        // This method will be called when the start button is clicked.
+        // It should read the selected algorithm, speed, array type, and size,
+        // generate the appropriate array, and then start the visualization.
+        if (sortThread != null && sortThread.isAlive()) {
+            return; // already running
+        }
+
+        int size;
+        try {
+            size = Integer.parseInt(sizeField.getText());
+            if (size <= 0 || size > 100) {
+                JOptionPane.showMessageDialog(this, "Size must be between 1 and 100.", "Invalid Input",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Please enter a valid integer for Size.", "Invalid Input",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        // Disable controls
+        startButton.setEnabled(false);
+        algoCombo.setEnabled(false);
+        arrayTypeCombo.setEnabled(false);
+        statsLabel.setText("Sorting...");
+
+        // Get choices
+        String algoName = (String) algoCombo.getSelectedItem();
+        int speed = speedSlider.getValue();
+        String type = (String) arrayTypeCombo.getSelectedItem();
+
+        // Create fresh array based on user inputs
+        array = engine.generate(size, type);
+        visualizer.setArray(array);
+
+        // Instantiate the sorter
+        SortingAlgorithm sorter = sorterFactory.createSorter(algoName);
+        sorter.setStepDelay(speed);
+        sorter.setOnUpdate(() -> {
+            visualizer.repaint();
+        });
+
+        sortThread = new Thread(() -> {
+            sorter.sort(array);
+
+            // Re-enable and show stats
+            SwingUtilities.invokeLater(() -> {
+                visualizer.repaint();
+                statsLabel.setText(String.format("Comparisons: %d | Interchanges: %d",
+                        sorter.getComparisons(), sorter.getInterchanges()));
+                startButton.setEnabled(true);
+                algoCombo.setEnabled(true);
+                arrayTypeCombo.setEnabled(true);
+            });
+        });
+
+        sortThread.start();
     }
 }

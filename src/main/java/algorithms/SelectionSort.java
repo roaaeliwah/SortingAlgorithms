@@ -23,6 +23,8 @@ public class SelectionSort extends AbstractSortingAlgo {
                 int tmp = arr[i];
                 arr[i] = arr[min];
                 arr[min] = tmp;
+                // update visualization after swap
+                pauseAndRender();
             }
         }
     }
