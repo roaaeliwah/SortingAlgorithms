@@ -290,7 +290,7 @@ public class ComparisonPanel extends JPanel {
             int maxSize = Integer.parseInt(maxSizeField.getText());
             int[] sizes = sizeGenerator.generateSizes(minSize, maxSize);
 
-            if (minSize <= 0 || maxSize > 100000 || minSize > maxSize) {
+            if (minSize <= 0 || maxSize > 10000 || minSize > maxSize) {
                 JOptionPane.showMessageDialog(this,
                         "Min must be ≥ 1, Max must be ≤ 10,000, and Min ≤ Max.",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
