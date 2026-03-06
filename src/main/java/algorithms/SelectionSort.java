@@ -6,37 +6,49 @@ public class SelectionSort extends AbstractSortingAlgorithm {
     public void sort(int[] arr) {
         comparisons = 0;
         interchanges = 0;
+        if (delayMs > 0)
+            greenIndices.clear();
+
         for (int i = 0; i < arr.length - 1; i++) {
             int min = i;
 
             // to find minimum's index
             for (int j = i + 1; j < arr.length; j++) {
                 comparisons++;
+
+                if (delayMs > 0) {
+                    // Current minimum → yellow, element being compared → red
+                    yellowIndices.clear();
+                    yellowIndices.add(min);
+                    redIndices.clear();
+                    redIndices.add(j);
+                    pauseAndRender();
+                }
+
                 if (arr[j] < arr[min]) {
                     min = j;
                 }
             }
 
-            // Move minimum element to its
-            // correct position
+            // Move minimum element to its correct position
             int temp = arr[i];
             arr[i] = arr[min];
             arr[min] = temp;
             interchanges++;
-            // update visualization after swap
-            if (delayMs > 0)
-                pauseAndRender();
 
-            // to swap
-//            if (min != i) {
-//                interchanges++;
-//                int tmp = arr[i];
-//                arr[i] = arr[min];
-//                arr[min] = tmp;
-//                // update visualization after swap
-//                if (delayMs > 0)
-//                    pauseAndRender();
-//            }
+            if (delayMs > 0) {
+                // After swap: index i is now sorted → green
+                greenIndices.add(i);
+                yellowIndices.clear();
+                redIndices.clear();
+                pauseAndRender();
+            }
+        }
+
+        if (delayMs > 0) {
+            // Mark all as green when done
+            greenIndices.add(arr.length - 1);
+            pauseAndRender();
         }
     }
 }

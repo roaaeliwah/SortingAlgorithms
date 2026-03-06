@@ -1,5 +1,7 @@
 package algorithms;
 
+import utils.SortVisualizer;
+
 public interface SortingAlgorithm {
     void sort(int[] arr);
 
@@ -18,4 +20,9 @@ public interface SortingAlgorithm {
      * Sets the delay in milliseconds between visualization steps.
      */
     void setStepDelay(int delayMs);
+
+    /**
+     * Sets the visualizer for color-coded highlighting.
+     */
+    void setVisualizer(SortVisualizer visualizer);
 }

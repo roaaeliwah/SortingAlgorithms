@@ -6,7 +6,9 @@ import utils.SortVisualizer;
 import utils.SorterFactory;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
+import java.io.File;
 
 public class VisualizationPanel extends JPanel {
     private final JComboBox<String> algoCombo;
@@ -15,11 +17,15 @@ public class VisualizationPanel extends JPanel {
     private final JLabel statsLabel;
     private final JComboBox<String> arrayTypeCombo;
     private final JTextField sizeField;
+    private final JLabel sizeLabel;
+    private final JButton chooseFileButton;
+    private final JLabel fileLabel;
     private Thread sortThread;
     private final ComparisonEngine engine = new ComparisonEngine();
     private int[] array;
     private final SorterFactory sorterFactory = new SorterFactory();
     private SortVisualizer visualizer = new SortVisualizer();
+    private File selectedFile;
 
     public VisualizationPanel() {
         setLayout(new BorderLayout());
@@ -41,13 +47,22 @@ public class VisualizationPanel extends JPanel {
         row1.add(speedSlider);
 
         row1.add(new JLabel("Type:"));
-        arrayTypeCombo = new JComboBox<>(new String[] { "Random", "Sorted", "Reverse" });
+        arrayTypeCombo = new JComboBox<>(new String[] { "Random", "Sorted", "Reverse", "File" });
+        arrayTypeCombo.addActionListener(e -> onArrayTypeChanged());
         row1.add(arrayTypeCombo);
 
         JPanel row2 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
-        row2.add(new JLabel("Size (Max 100):"));
+        sizeLabel = new JLabel("Size (Max 100):");
+        row2.add(sizeLabel);
         sizeField = new JTextField("100", 5);
         row2.add(sizeField);
+
+        chooseFileButton = new JButton("Choose File...");
+        chooseFileButton.addActionListener(e -> chooseFile());
+        row2.add(chooseFileButton);
+
+        fileLabel = new JLabel("No file selected");
+        row2.add(fileLabel);
 
         startButton = new JButton("Start Visualization");
         startButton.addActionListener(e -> startVisualization());
@@ -69,7 +84,27 @@ public class VisualizationPanel extends JPanel {
         statsPanel.add(statsLabel);
         add(statsPanel, BorderLayout.SOUTH);
 
-        // Initialize with default array
+        // File controls are only relevant when "File" input type is selected.
+        chooseFileButton.setVisible(false);
+        fileLabel.setVisible(false);
+    }
+
+    private void onArrayTypeChanged() {
+        boolean isFileType = "File".equals(arrayTypeCombo.getSelectedItem());
+        sizeLabel.setVisible(!isFileType);
+        sizeField.setVisible(!isFileType);
+        chooseFileButton.setVisible(isFileType);
+        fileLabel.setVisible(isFileType);
+    }
+
+    private void chooseFile() {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(new FileNameExtensionFilter("Text/CSV Files", "txt", "csv"));
+        int result = chooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = chooser.getSelectedFile();
+            fileLabel.setText(selectedFile.getName());
+        }
     }
 
     private void startVisualization() {
@@ -80,40 +115,58 @@ public class VisualizationPanel extends JPanel {
             return; // already running
         }
 
-        int size;
-        try {
-            size = Integer.parseInt(sizeField.getText());
-            if (size <= 0 || size > 100) {
-                JOptionPane.showMessageDialog(this, "Size must be between 1 and 100.", "Invalid Input",
+        String type = (String) arrayTypeCombo.getSelectedItem();
+
+        if ("File".equals(type)) {
+            if (selectedFile == null) {
+                JOptionPane.showMessageDialog(this, "Please choose a file first.", "No File Selected",
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "Please enter a valid integer for Size.", "Invalid Input",
-                    JOptionPane.ERROR_MESSAGE);
-            return;
+            try {
+                array = engine.generateFromFile(selectedFile.getAbsolutePath());
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Could not load file: " + ex.getMessage(), "File Error",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+        } else {
+            int size;
+            try {
+                size = Integer.parseInt(sizeField.getText());
+                if (size <= 0 || size > 100) {
+                    JOptionPane.showMessageDialog(this, "Size must be between 1 and 100.", "Invalid Input",
+                            JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            } catch (NumberFormatException ex) {
+                JOptionPane.showMessageDialog(this, "Please enter a valid integer for Size.", "Invalid Input",
+                        JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            assert type != null;
+            array = engine.generate(size, type);
         }
 
         // Disable controls
         startButton.setEnabled(false);
         algoCombo.setEnabled(false);
         arrayTypeCombo.setEnabled(false);
+        speedSlider.setEnabled(false);
+        sizeField.setEnabled(false);
+        chooseFileButton.setEnabled(false);
         statsLabel.setText("Sorting...");
 
         // Get choices
         String algoName = (String) algoCombo.getSelectedItem();
         int speed = speedSlider.getValue();
-        String type = (String) arrayTypeCombo.getSelectedItem();
-
-        // Create fresh array based on user inputs
-        assert type != null;
-        array = engine.generate(size, type);
         visualizer.setArray(array);
 
         // Instantiate the sorter
         assert algoName != null;
         SortingAlgorithm sorter = SorterFactory.createSorter(algoName);
         sorter.setStepDelay(speed);
+        sorter.setVisualizer(visualizer); // Hook up the visualizer for color-coding
         sorter.setOnUpdate(() -> {
             visualizer.repaint();
         });
@@ -121,7 +174,8 @@ public class VisualizationPanel extends JPanel {
         sortThread = new Thread(() -> {
             sorter.sort(array);
 
-            // Re-enable and show stats
+            // Re-enable controls and show final stats.
+            // Keep final highlights visible so users can see the finished state.
             SwingUtilities.invokeLater(() -> {
                 visualizer.repaint();
                 statsLabel.setText(String.format("Comparisons: %d | Interchanges: %d",
@@ -129,6 +183,10 @@ public class VisualizationPanel extends JPanel {
                 startButton.setEnabled(true);
                 algoCombo.setEnabled(true);
                 arrayTypeCombo.setEnabled(true);
+                speedSlider.setEnabled(true);
+                sizeField.setEnabled(true);
+                chooseFileButton.setEnabled(true);
+                onArrayTypeChanged();
             });
         });
 
