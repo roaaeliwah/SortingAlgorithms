@@ -17,28 +17,23 @@ import java.util.Map;
 import java.util.List;
 
 public class ComparisonPanel extends JPanel {
-    private JComboBox<String> arrayTypeCombo;
-    private JTextField minSizeField;
-    private JTextField maxSizeField;
-    private JTextField runsField;
-    private JButton runButton;
-    private JTable resultsTable;
-    private DefaultTableModel tableModel;
+    private final JComboBox<String> arrayTypeCombo;
+    private final JTextField minSizeField;
+    private final JTextField maxSizeField;
+    private final JTextField runsField;
+    private final JButton runButton;
+    private final DefaultTableModel tableModel;
 
-    private JButton chooseFilesButton;
-    private JLabel filesLabel;
+    private final JButton chooseFilesButton;
+    private final JLabel filesLabel;
 
-    private JButton exportCsvButton;
-
-    // Stores the selected file paths when "File" input type is chosen
     private File[] selectedFiles = null;
 
-    // References to size-related components so we can enable/disable them
-    private JLabel minSizeLabel;
-    private JLabel maxSizeLabel;
+    private final JLabel minSizeLabel;
+    private final JLabel maxSizeLabel;
 
-    private ComparisonEngine engine;
-    private SizeGenerator sizeGenerator = new SizeGenerator();
+    private final ComparisonEngine engine;
+    private final SizeGenerator sizeGenerator = new SizeGenerator();
     private final String[] ALGORITHMS = { "Bubble", "Selection",
             "Insertion", "Merge", "Quick", "Heap" };
 
@@ -82,7 +77,7 @@ public class ComparisonPanel extends JPanel {
         runButton.addActionListener(e -> runComparison());
         controlPanel.add(runButton);
 
-        exportCsvButton = new JButton("Export CSV");
+        JButton exportCsvButton = new JButton("Export CSV");
         exportCsvButton.addActionListener(e -> exportToCSV());
         controlPanel.add(exportCsvButton);
 
@@ -103,7 +98,7 @@ public class ComparisonPanel extends JPanel {
                 return false; // read-only table
             }
         };
-        resultsTable = new JTable(tableModel);
+        JTable resultsTable = new JTable(tableModel);
         resultsTable.setFillsViewportHeight(true);
         resultsTable.setAutoCreateRowSorter(true);
 

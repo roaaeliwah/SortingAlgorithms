@@ -44,8 +44,6 @@ public class InsertionSort extends AbstractSortingAlgorithm {
             }
             arr[j + 1] = tmp;
 
-            // Keep active highlights only during insertion steps.
-            // We color green only when the full array is sorted.
             redIndices.clear();
             yellowIndices.clear();
             if (delayMs > 0)
@@ -53,7 +51,6 @@ public class InsertionSort extends AbstractSortingAlgorithm {
         }
 
         if (delayMs > 0) {
-            // Mark all as green when done
             for (int i = 0; i < arr.length; i++)
                 greenIndices.add(i);
             pauseAndRender();

@@ -1,6 +1,6 @@
 package gui;
 
-import algorithms.SortingAlgorithm;
+import algorithms.AbstractSortingAlgorithm;
 import logic.ComparisonEngine;
 import utils.SortVisualizer;
 import utils.SorterFactory;
@@ -164,7 +164,7 @@ public class VisualizationPanel extends JPanel {
 
         // Instantiate the sorter
         assert algoName != null;
-        SortingAlgorithm sorter = SorterFactory.createSorter(algoName);
+        AbstractSortingAlgorithm sorter = SorterFactory.createSorter(algoName);
         sorter.setStepDelay(speed);
         sorter.setVisualizer(visualizer); // Hook up the visualizer for color-coding
         sorter.setOnUpdate(() -> {

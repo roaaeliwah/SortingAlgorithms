@@ -17,7 +17,6 @@ public class SelectionSort extends AbstractSortingAlgorithm {
                 comparisons++;
 
                 if (delayMs > 0) {
-                    // Current minimum → yellow, element being compared → red
                     yellowIndices.clear();
                     yellowIndices.add(min);
                     redIndices.clear();
@@ -37,7 +36,6 @@ public class SelectionSort extends AbstractSortingAlgorithm {
             interchanges++;
 
             if (delayMs > 0) {
-                // After swap: index i is now sorted → green
                 greenIndices.add(i);
                 yellowIndices.clear();
                 redIndices.clear();
@@ -46,7 +44,6 @@ public class SelectionSort extends AbstractSortingAlgorithm {
         }
 
         if (delayMs > 0) {
-            // Mark all as green when done
             greenIndices.add(arr.length - 1);
             pauseAndRender();
         }

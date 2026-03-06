@@ -10,7 +10,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
             greenIndices.clear();
         quickSort(0, arr.length - 1, arr);
 
-        // Mark all as green when done
         if (delayMs > 0) {
             redIndices.clear();
             yellowIndices.clear();
@@ -26,7 +25,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
             quickSort(low, pi - 1, arr);
             quickSort(pi + 1, high, arr);
         } else if (low == high) {
-            // Single element is sorted
             greenIndices.add(low);
             if (delayMs > 0)
                 pauseAndRender();
@@ -59,7 +57,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
                 arr[i] = arr[j];
                 arr[j] = temp;
                 interchanges++;
-                // Repaint after swap
                 if (delayMs > 0)
                     pauseAndRender();
             }

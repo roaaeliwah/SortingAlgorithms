@@ -3,7 +3,7 @@ package utils;
 import algorithms.*;
 
 public class SorterFactory {
-        public static SortingAlgorithm createSorter(String algorithmName) {
+        public static AbstractSortingAlgorithm createSorter(String algorithmName) {
             switch (algorithmName.toLowerCase()) {
                 case "bubble":
                     return new BubbleSort();

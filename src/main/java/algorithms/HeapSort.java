@@ -6,9 +6,7 @@ public class HeapSort extends AbstractSortingAlgorithm {
     public void sort(int[] arr) {
         comparisons = 0;
         interchanges = 0;
-        if (delayMs > 0) {
-            greenIndices.clear();
-        }
+        if (delayMs > 0) greenIndices.clear();
         int n = arr.length;
 
         // Build heap (rearrange array)
@@ -36,7 +34,6 @@ public class HeapSort extends AbstractSortingAlgorithm {
         }
 
         if (delayMs > 0) {
-            // Mark all as green when done
             greenIndices.add(0);
             redIndices.clear();
             yellowIndices.clear();

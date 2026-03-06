@@ -17,9 +17,9 @@ public class SortVisualizer extends JPanel {
     }
 
     public void setHighlights(Set<Integer> red, Set<Integer> yellow, Set<Integer> green) {
-        this.redIndices = red != null ? red : new HashSet<>();
-        this.yellowIndices = yellow != null ? yellow : new HashSet<>();
-        this.greenIndices = green != null ? green : new HashSet<>();
+        this.redIndices = red;
+        this.yellowIndices = yellow;
+        this.greenIndices = green;
     }
 
     public void clearHighlights() {
@@ -70,7 +70,7 @@ public class SortVisualizer extends JPanel {
             } else if (redIndices.contains(i)) {
                 g2d.setColor(new Color(244, 67, 54)); // red
             } else {
-                g2d.setColor(new Color(50, 150, 200)); // default blue
+                g2d.setColor(new Color(50, 150, 200)); // blue (default)
             }
 
             g2d.fillRect(x, y, (int) Math.max(1, barWidth - 1), barHeight);

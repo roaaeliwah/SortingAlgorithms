@@ -6,8 +6,7 @@ public class BubbleSort extends AbstractSortingAlgorithm {
     public void sort(int[] arr) {
         comparisons = 0;
         interchanges = 0;
-        if (delayMs > 0)
-            greenIndices.clear();
+        greenIndices.clear();
 
         for (int i = 0; i < arr.length; i++) {
             boolean swapped = false;
@@ -28,8 +27,7 @@ public class BubbleSort extends AbstractSortingAlgorithm {
                     interchanges++;
                     swapped = true;
                     // Repaint after swap
-                    if (delayMs > 0)
-                        pauseAndRender();
+                    if (delayMs > 0) pauseAndRender();
                 }
             }
             if (delayMs > 0) {
@@ -46,7 +44,6 @@ public class BubbleSort extends AbstractSortingAlgorithm {
         redIndices.clear();
         for (int i = 0; i < arr.length; i++)
             greenIndices.add(i);
-        if (delayMs > 0)
-            pauseAndRender();
+        if (delayMs > 0) pauseAndRender();
     }
 }

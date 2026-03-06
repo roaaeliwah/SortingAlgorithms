@@ -13,7 +13,6 @@ public class MergeSort extends AbstractSortingAlgorithm {
         }
         mergeSort(0, arr.length - 1, arr);
 
-        // Mark all as green when done
         if (delayMs > 0) {
             redIndices.clear();
             yellowIndices.clear();
@@ -51,7 +50,6 @@ public class MergeSort extends AbstractSortingAlgorithm {
         int ctr = l;
 
         if (delayMs > 0) {
-            // Current merge window is being processed.
             yellowIndices.clear();
             for (int i = l; i <= r; i++)
                 yellowIndices.add(i);
@@ -62,7 +60,6 @@ public class MergeSort extends AbstractSortingAlgorithm {
             interchanges++;
 
             if (delayMs > 0) {
-                // Target write position in the merge window.
                 redIndices.clear();
                 redIndices.add(ctr);
             }
@@ -72,7 +69,6 @@ public class MergeSort extends AbstractSortingAlgorithm {
             } else {
                 arr[ctr++] = right[ctrR++];
             }
-            // Repaint after copy back to main array
             if (delayMs > 0)
                 pauseAndRender();
         }
@@ -94,7 +90,6 @@ public class MergeSort extends AbstractSortingAlgorithm {
                 pauseAndRender();
         }
         if (delayMs > 0) {
-            // Merge for this window is complete.
             redIndices.clear();
             yellowIndices.clear();
             pauseAndRender();
