@@ -4,9 +4,14 @@ import algorithms.AbstractSortingAlgo;
 import algorithms.SortingAlgorithm;
 import utils.ArrayGenerator;
 
+import java.io.IOException;
+
 public class ComparisonEngine {
     private final ArrayGenerator generator = new ArrayGenerator();
 
+    public int[] generateFromFile(String filePath) throws IOException {
+        return generator.loadFromFile(filePath);
+    }
     public int[] generate(int size, String type) {
         switch (type.toLowerCase()) {
             case "sorted":

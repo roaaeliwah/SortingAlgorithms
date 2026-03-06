@@ -25,7 +25,7 @@ public class VisualizationPanel extends JPanel {
         setLayout(new BorderLayout());
 
         // Top Control Panel - Use a two-row panel to fit all controls comfortably
-        JPanel topPanel = new JPanel(new GridLayout(2, 1, 5, 5));
+        JPanel controlPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
         row1.add(new JLabel("Algorithm:"));
@@ -53,10 +53,10 @@ public class VisualizationPanel extends JPanel {
         startButton.addActionListener(e -> startVisualization());
         row2.add(startButton);
 
-        topPanel.add(row1);
-        topPanel.add(row2);
+        controlPanel.add(row1);
+        controlPanel.add(row2);
 
-        add(topPanel, BorderLayout.NORTH);
+        add(controlPanel, BorderLayout.NORTH);
 
         // Center Drawing Panel
          visualizer = new SortVisualizer();
