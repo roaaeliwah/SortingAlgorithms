@@ -1,7 +1,6 @@
 package logic;
 
-import algorithms.AbstractSortingAlgo;
-import algorithms.SortingAlgorithm;
+import algorithms.AbstractSortingAlgorithm;
 import utils.ArrayGenerator;
 
 import java.io.IOException;
@@ -25,7 +24,7 @@ public class ComparisonEngine {
         }
     }
 
-    private AbstractSortingAlgo createSortingAlgorithm(String name) {
+    private AbstractSortingAlgorithm createSortingAlgorithm(String name) {
         switch (name.toLowerCase()) {
             case "bubble":
                 return new algorithms.BubbleSort();
@@ -45,7 +44,7 @@ public class ComparisonEngine {
     }
 
     public SortResult benchmark(String algorithmName, int size, int runs, int[] baseArray) {
-        AbstractSortingAlgo sorter = createSortingAlgorithm(algorithmName);
+        AbstractSortingAlgorithm sorter = createSortingAlgorithm(algorithmName);
         SortResult result = new SortResult();
 
         result.algorithmName = algorithmName;
@@ -74,7 +73,7 @@ public class ComparisonEngine {
             totalInterchanges += sorter.getInterchanges();
         }
 
-        // convert nanoseconds to milliseconds for reporting
+        // convert nanoseconds to milliseconds
         result.averageRunningTime = (totalTime / (double) runs) / 1_000_000.0;
         result.minRunningTime = minTime / 1_000_000.0;
         result.maxRunningTime = maxTime / 1_000_000.0;

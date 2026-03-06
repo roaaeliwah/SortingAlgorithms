@@ -9,16 +9,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class VisualizationPanel extends JPanel {
-    private JComboBox<String> algoCombo;
-    private JSlider speedSlider;
-    private JButton startButton;
-    private JLabel statsLabel;
-    private JComboBox<String> arrayTypeCombo;
-    private JTextField sizeField;
+    private final JComboBox<String> algoCombo;
+    private final JSlider speedSlider;
+    private final JButton startButton;
+    private final JLabel statsLabel;
+    private final JComboBox<String> arrayTypeCombo;
+    private final JTextField sizeField;
     private Thread sortThread;
-    private ComparisonEngine engine = new ComparisonEngine();
+    private final ComparisonEngine engine = new ComparisonEngine();
     private int[] array;
-    private SorterFactory sorterFactory = new SorterFactory();
+    private final SorterFactory sorterFactory = new SorterFactory();
     private SortVisualizer visualizer = new SortVisualizer();
 
     public VisualizationPanel() {
@@ -33,7 +33,7 @@ public class VisualizationPanel extends JPanel {
         row1.add(algoCombo);
 
         row1.add(new JLabel("Speed:"));
-        speedSlider = new JSlider(1, 100, 50); // Delay in ms: 1 is fast, 100 is slow
+        speedSlider = new JSlider(1, 200, 50); // Delay in ms: 1 is fast, 100 is slow
 
         // ticks spacing
         speedSlider.setMajorTickSpacing(20);
@@ -59,8 +59,8 @@ public class VisualizationPanel extends JPanel {
         add(controlPanel, BorderLayout.NORTH);
 
         // Center Drawing Panel
-         visualizer = new SortVisualizer();
-         add(visualizer, BorderLayout.CENTER);
+        visualizer = new SortVisualizer();
+        add(visualizer, BorderLayout.CENTER);
 
         // Bottom Stats Panel
         JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -73,8 +73,8 @@ public class VisualizationPanel extends JPanel {
     }
 
     private void startVisualization() {
-        // This method will be called when the start button is clicked.
-        // It should read the selected algorithm, speed, array type, and size,
+        // called when the start button is clicked.
+        // read the selected algorithm, speed, array type, and size,
         // generate the appropriate array, and then start the visualization.
         if (sortThread != null && sortThread.isAlive()) {
             return; // already running
@@ -106,11 +106,13 @@ public class VisualizationPanel extends JPanel {
         String type = (String) arrayTypeCombo.getSelectedItem();
 
         // Create fresh array based on user inputs
+        assert type != null;
         array = engine.generate(size, type);
         visualizer.setArray(array);
 
         // Instantiate the sorter
-        SortingAlgorithm sorter = sorterFactory.createSorter(algoName);
+        assert algoName != null;
+        SortingAlgorithm sorter = SorterFactory.createSorter(algoName);
         sorter.setStepDelay(speed);
         sorter.setOnUpdate(() -> {
             visualizer.repaint();

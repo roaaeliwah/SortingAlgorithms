@@ -13,9 +13,7 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
 import java.util.List;
 
 public class ComparisonPanel extends JPanel {
@@ -41,8 +39,8 @@ public class ComparisonPanel extends JPanel {
 
     private ComparisonEngine engine;
     private SizeGenerator sizeGenerator = new SizeGenerator();
-    private final String[] ALGORITHMS = {"Bubble", "Selection",
-            "Insertion", "Merge", "Quick", "Heap"};
+    private final String[] ALGORITHMS = { "Bubble", "Selection",
+            "Insertion", "Merge", "Quick", "Heap" };
 
     public ComparisonPanel() {
         engine = new ComparisonEngine();
@@ -64,7 +62,7 @@ public class ComparisonPanel extends JPanel {
         controlPanel.add(minSizeField);
 
         maxSizeLabel = new JLabel("Max Size (≤10,000):");
-        controlPanel.add(minSizeLabel);
+        controlPanel.add(maxSizeLabel);
         maxSizeField = new JTextField("5000", 6);
         controlPanel.add(maxSizeField);
 
@@ -93,7 +91,6 @@ public class ComparisonPanel extends JPanel {
         filesLabel.setVisible(false);
 
         add(controlPanel, BorderLayout.NORTH);
-
 
         String[] columns = {
                 "Algorithm", "Size", "Type", "Runs",
@@ -247,24 +244,17 @@ public class ComparisonPanel extends JPanel {
                     return null;
                 }
 
-                ExecutorService executor = Executors.newFixedThreadPool(
-                        Runtime.getRuntime().availableProcessors());
-
                 // entrySet: returns a set of key, value
                 for (Map.Entry<String, int[]> entry : fileArrays.entrySet()) {
                     String fileName = entry.getKey();
                     int[] baseArray = entry.getValue();
 
                     for (String algo : ALGORITHMS) {
-                        executor.submit(() -> {
-                            SortResult result = engine.benchmark(algo, baseArray.length, runs, baseArray);
-                            result.arrayType = fileName;
-                            publish(result);
-                        });
+                        SortResult result = engine.benchmark(algo, baseArray.length, runs, baseArray);
+                        result.arrayType = fileName;
+                        publish(result);
                     }
                 }
-                executor.shutdown();
-                executor.awaitTermination(1, TimeUnit.HOURS);
                 return null;
             }
 
@@ -300,7 +290,7 @@ public class ComparisonPanel extends JPanel {
             int maxSize = Integer.parseInt(maxSizeField.getText());
             int[] sizes = sizeGenerator.generateSizes(minSize, maxSize);
 
-            if (minSize <= 0 || maxSize > 1000000 || minSize > maxSize) {
+            if (minSize <= 0 || maxSize > 100000 || minSize > maxSize) {
                 JOptionPane.showMessageDialog(this,
                         "Min must be ≥ 1, Max must be ≤ 10,000, and Min ≤ Max.",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -320,22 +310,16 @@ public class ComparisonPanel extends JPanel {
                         baseArrays.put(size, engine.generate(size, type));
                     }
 
-                    // Submit all algorithm x size combinations in parallel
-                    ExecutorService executor = Executors.newFixedThreadPool(
-                            Runtime.getRuntime().availableProcessors());
+                    // Execute all algorithm x size combinations sequentially
                     for (int size : sizes) {
                         int[] baseArray = baseArrays.get(size);
                         for (String algo : ALGORITHMS) {
-                            executor.submit(() -> {
-                                SortResult result = engine.benchmark(algo, size, runs, baseArray);
-                                result.arrayType = type;
+                            SortResult result = engine.benchmark(algo, size, runs, baseArray);
+                            result.arrayType = type;
 
-                                publish(result);
-                            });
+                            publish(result);
                         }
                     }
-                    executor.shutdown();
-                    executor.awaitTermination(1, TimeUnit.HOURS);
                     return null;
                 }
 
@@ -364,7 +348,6 @@ public class ComparisonPanel extends JPanel {
                 }
             };
             worker.execute();
-
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this,

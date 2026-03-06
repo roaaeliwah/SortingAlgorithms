@@ -1,6 +1,6 @@
 package algorithms;
 
-public class HeapSort extends AbstractSortingAlgo {
+public class HeapSort extends AbstractSortingAlgorithm {
 
     @Override
     public void sort(int[] arr) {
@@ -19,7 +19,8 @@ public class HeapSort extends AbstractSortingAlgo {
             arr[0] = arr[i];
             arr[i] = temp;
             interchanges++;
-            if(delayMs>0) pauseAndRender();
+            if (delayMs > 0)
+                pauseAndRender();
 
             // call max heapify on the reduced heap
             heapify(i, 0, arr);
@@ -33,9 +34,11 @@ public class HeapSort extends AbstractSortingAlgo {
 
         // If left child is larger than root and node has children (node's index is less
         // than heap size)
-        if (l < n && arr[l] > arr[largest]) {
+        if (l < n) {
             comparisons++;
-            largest = l;
+            if (arr[l] > arr[largest]) {
+                largest = l;
+            }
         }
 
         // If right child is larger than largest so far
@@ -50,7 +53,7 @@ public class HeapSort extends AbstractSortingAlgo {
             arr[i] = arr[largest];
             arr[largest] = swap;
             interchanges++;
-            pauseAndRender();
+            if(delayMs>0) pauseAndRender();
 
             // Recursively heapify the affected sub-tree
             heapify(n, largest, arr);

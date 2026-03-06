@@ -1,6 +1,6 @@
 package algorithms;
 
-public class MergeSort extends AbstractSortingAlgo {
+public class MergeSort extends AbstractSortingAlgorithm {
 
     @Override
     public void sort(int[] arr) {
@@ -43,13 +43,14 @@ public class MergeSort extends AbstractSortingAlgo {
             } else {
                 arr[ctr++] = right[ctrR++];
             }
-            if(delayMs>0) pauseAndRender();
+            if (delayMs > 0)
+                pauseAndRender();
         }
 
         while (ctrL < left.length) {
             interchanges++;
             arr[ctr++] = left[ctrL++];
-            pauseAndRender();
+            if(delayMs>0) pauseAndRender();
         }
         while (ctrR < right.length) {
             interchanges++;

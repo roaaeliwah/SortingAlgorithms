@@ -2,12 +2,11 @@ package algorithms;
 
 import javax.swing.SwingUtilities;
 
-public abstract class AbstractSortingAlgo implements  SortingAlgorithm {
+public abstract class AbstractSortingAlgorithm implements SortingAlgorithm {
     long comparisons = 0;
     long interchanges = 0;
     int delayMs = 0;
     Runnable onUpdate;
-
 
     @Override
     public long getComparisons() {
@@ -34,13 +33,13 @@ public abstract class AbstractSortingAlgo implements  SortingAlgorithm {
     }
 
     protected void pauseAndRender() {
-        if(onUpdate != null) {
+        if (onUpdate != null) {
             // notifies gui that a change happened - run on EDT for thread-safety
             SwingUtilities.invokeLater(onUpdate);
         }
 
         // ensures it doesn't sleep during comparison and only during visualization
-        if(delayMs > 0) {
+        if (delayMs > 0) {
             try {
                 Thread.sleep(delayMs);
             } catch (InterruptedException e) {

@@ -1,6 +1,6 @@
 package algorithms;
 
-public class InsertionSort extends  AbstractSortingAlgo {
+public class InsertionSort extends AbstractSortingAlgorithm {
 
     @Override
     public void sort(int[] arr) {
@@ -14,7 +14,8 @@ public class InsertionSort extends  AbstractSortingAlgo {
                 if (arr[j] > tmp) {
                     interchanges++;
                     arr[j + 1] = arr[j];
-                    if(delayMs>0) pauseAndRender();
+                    if (delayMs > 0)
+                        pauseAndRender();
                 } else {
                     break;
                 }

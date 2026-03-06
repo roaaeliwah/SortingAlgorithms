@@ -1,6 +1,6 @@
 package algorithms;
 
-public class SelectionSort extends AbstractSortingAlgo {
+public class SelectionSort extends AbstractSortingAlgorithm {
 
     @Override
     public void sort(int[] arr) {
@@ -24,7 +24,8 @@ public class SelectionSort extends AbstractSortingAlgo {
                 arr[i] = arr[min];
                 arr[min] = tmp;
                 // update visualization after swap
-                if(delayMs>0) pauseAndRender();
+                if (delayMs > 0)
+                    pauseAndRender();
             }
         }
     }

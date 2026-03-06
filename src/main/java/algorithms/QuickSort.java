@@ -1,6 +1,6 @@
 package algorithms;
 
-public class QuickSort extends AbstractSortingAlgo {
+public class QuickSort extends AbstractSortingAlgorithm {
 
     @Override
     public void sort(int[] arr) {
@@ -29,7 +29,8 @@ public class QuickSort extends AbstractSortingAlgo {
                 arr[i] = arr[j];
                 arr[j] = temp;
                 interchanges++;
-                if(delayMs>0) pauseAndRender();
+                if (delayMs > 0)
+                    pauseAndRender();
             }
         }
 
@@ -37,7 +38,8 @@ public class QuickSort extends AbstractSortingAlgo {
         arr[i + 1] = arr[high];
         arr[high] = temp;
         interchanges++;
-        if(delayMs>0) pauseAndRender();
+        if (delayMs > 0)
+            pauseAndRender();
 
         return i + 1;
     }

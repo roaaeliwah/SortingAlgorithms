@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 # Load data
-data = pd.read_csv("results.csv")
+data = pd.read_csv("C:\\uni\\2nd\\2nd sem\\dsa\\labs\\sortingAlgorithmss\\src\\results.csv")
 
 # -------------------------
 # 1 Runtime vs Size
@@ -19,7 +19,7 @@ plt.title("Sorting Runtime vs Array Size")
 plt.legend()
 plt.grid(True)
 
-plt.ylim(0, 3000)  # adjust 3000 to whatever max you want to show
+ #adjust 3000 to whatever max you want to show
 
 plt.savefig("runtime_vs_size.png")
 plt.show()
