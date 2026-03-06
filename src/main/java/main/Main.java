@@ -1,8 +1,6 @@
 package main;
 
-import algorithms.SelectionSort;
 import gui.MainFrame;
-import utils.ArrayGenerator;
 
 import javax.swing.*;
 

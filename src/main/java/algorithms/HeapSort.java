@@ -19,7 +19,7 @@ public class HeapSort extends AbstractSortingAlgo {
             arr[0] = arr[i];
             arr[i] = temp;
             interchanges++;
-            pauseAndRender();
+            if(delayMs>0) pauseAndRender();
 
             // call max heapify on the reduced heap
             heapify(i, 0, arr);

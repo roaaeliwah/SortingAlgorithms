@@ -43,7 +43,7 @@ public class MergeSort extends AbstractSortingAlgo {
             } else {
                 arr[ctr++] = right[ctrR++];
             }
-            pauseAndRender();
+            if(delayMs>0) pauseAndRender();
         }
 
         while (ctrL < left.length) {

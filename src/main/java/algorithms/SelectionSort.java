@@ -24,7 +24,7 @@ public class SelectionSort extends AbstractSortingAlgo {
                 arr[i] = arr[min];
                 arr[min] = tmp;
                 // update visualization after swap
-                pauseAndRender();
+                if(delayMs>0) pauseAndRender();
             }
         }
     }

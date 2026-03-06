@@ -9,6 +9,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -24,10 +26,11 @@ public class ComparisonPanel extends JPanel {
     private JButton runButton;
     private JTable resultsTable;
     private DefaultTableModel tableModel;
-//    private ChartPanel chartPanel;
 
     private JButton chooseFilesButton;
     private JLabel filesLabel;
+
+    private JButton exportCsvButton;
 
     // Stores the selected file paths when "File" input type is chosen
     private File[] selectedFiles = null;
@@ -81,6 +84,10 @@ public class ComparisonPanel extends JPanel {
         runButton.addActionListener(e -> runComparison());
         controlPanel.add(runButton);
 
+        exportCsvButton = new JButton("Export CSV");
+        exportCsvButton.addActionListener(e -> exportToCSV());
+        controlPanel.add(exportCsvButton);
+
         // Hide file input controls by default ("Random" is the default selection)
         chooseFilesButton.setVisible(false);
         filesLabel.setVisible(false);
@@ -106,6 +113,59 @@ public class ComparisonPanel extends JPanel {
         JScrollPane tableScroll = new JScrollPane(resultsTable);
 
         add(tableScroll, BorderLayout.CENTER);
+    }
+
+    private void exportToCSV() {
+        if (tableModel.getRowCount() == 0) {
+            JOptionPane.showMessageDialog(this, "There is no data to export.", "Empty Table",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle("Export to CSV");
+        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("CSV Files", "csv"));
+
+        int result = chooser.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File dest = chooser.getSelectedFile();
+            // Ensure the file ends with .csv
+            if (!dest.getName().toLowerCase().endsWith(".csv")) {
+                dest = new File(dest.getAbsolutePath() + ".csv");
+            }
+
+            try (PrintWriter writer = new PrintWriter(new FileWriter(dest))) {
+                // Write headers
+                for (int i = 0; i < tableModel.getColumnCount(); i++) {
+                    writer.print(tableModel.getColumnName(i));
+                    if (i < tableModel.getColumnCount() - 1) {
+                        writer.print(",");
+                    }
+                }
+                writer.println();
+
+                // Write data
+                for (int row = 0; row < tableModel.getRowCount(); row++) {
+                    for (int col = 0; col < tableModel.getColumnCount(); col++) {
+                        Object val = tableModel.getValueAt(row, col);
+                        String valueStr = (val == null) ? "" : val.toString();
+                        // Quote strings that contain commas
+                        if (valueStr.contains(",")) {
+                            valueStr = "\"" + valueStr + "\"";
+                        }
+                        writer.print(valueStr);
+                        if (col < tableModel.getColumnCount() - 1) {
+                            writer.print(",");
+                        }
+                    }
+                    writer.println();
+                }
+                JOptionPane.showMessageDialog(this, "Export successful!", "Success", JOptionPane.INFORMATION_MESSAGE);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(this, "Error writing to file: " + ex.getMessage(), "Export Error",
+                        JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
 
     private void onArrayTypeChanged() {
@@ -240,7 +300,7 @@ public class ComparisonPanel extends JPanel {
             int maxSize = Integer.parseInt(maxSizeField.getText());
             int[] sizes = sizeGenerator.generateSizes(minSize, maxSize);
 
-            if (minSize <= 0 || maxSize > 10000 || minSize > maxSize) {
+            if (minSize <= 0 || maxSize > 1000000 || minSize > maxSize) {
                 JOptionPane.showMessageDialog(this,
                         "Min must be ≥ 1, Max must be ≤ 10,000, and Min ≤ Max.",
                         "Invalid Input", JOptionPane.ERROR_MESSAGE);

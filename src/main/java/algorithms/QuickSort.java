@@ -29,7 +29,7 @@ public class QuickSort extends AbstractSortingAlgo {
                 arr[i] = arr[j];
                 arr[j] = temp;
                 interchanges++;
-                pauseAndRender();
+                if(delayMs>0) pauseAndRender();
             }
         }
 
@@ -37,7 +37,7 @@ public class QuickSort extends AbstractSortingAlgo {
         arr[i + 1] = arr[high];
         arr[high] = temp;
         interchanges++;
-        pauseAndRender();
+        if(delayMs>0) pauseAndRender();
 
         return i + 1;
     }

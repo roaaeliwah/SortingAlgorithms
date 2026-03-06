@@ -15,7 +15,7 @@ public class BubbleSort extends AbstractSortingAlgo {
                     arr[j + 1] = tmp;
                     interchanges++;
                     // notify visualizer and apply step delay
-                    pauseAndRender();
+                    if(delayMs>0) pauseAndRender();
                 }
             }
         }
