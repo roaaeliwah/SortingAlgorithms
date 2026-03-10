@@ -12,7 +12,7 @@ public class BubbleSort extends AbstractSortingAlgorithm {
             boolean swapped = false;
             for (int j = 0; j < arr.length - i - 1; j++) {
                 if (delayMs > 0) {
-                    // Highlight the two elements being swapped in red
+                    // Highlight the two elements being compared in red
                     redIndices.clear();
                     redIndices.add(j);
                     redIndices.add(j + 1);
@@ -27,7 +27,8 @@ public class BubbleSort extends AbstractSortingAlgorithm {
                     interchanges++;
                     swapped = true;
                     // Repaint after swap
-                    if (delayMs > 0) pauseAndRender();
+                    if (delayMs > 0)
+                        pauseAndRender();
                 }
             }
             if (delayMs > 0) {
@@ -41,9 +42,12 @@ public class BubbleSort extends AbstractSortingAlgorithm {
                 break;
         }
         // Mark all as green when done
-        redIndices.clear();
-        for (int i = 0; i < arr.length; i++)
-            greenIndices.add(i);
-        if (delayMs > 0) pauseAndRender();
+        if (delayMs > 0) {
+            redIndices.clear();
+            for (int i = 0; i < arr.length; i++)
+                greenIndices.add(i);
+            pauseAndRender();
+        }
+
     }
 }

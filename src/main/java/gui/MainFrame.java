@@ -9,7 +9,6 @@ public class MainFrame extends JFrame {
         setTitle("Sorting Algorithms Comparison & Visualization");
         setSize(1000, 700);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        // Center the window on the screen
         setLocationRelativeTo(null);
 
         tabbedPane.addTab("Comparison", new ComparisonPanel());

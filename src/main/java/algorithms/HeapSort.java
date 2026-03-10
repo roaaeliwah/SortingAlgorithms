@@ -6,30 +6,28 @@ public class HeapSort extends AbstractSortingAlgorithm {
     public void sort(int[] arr) {
         comparisons = 0;
         interchanges = 0;
-        if (delayMs > 0) greenIndices.clear();
+        if (delayMs > 0)
+            greenIndices.clear();
         int n = arr.length;
 
         // Build heap (rearrange array)
+        // n/2 nodes
         for (int i = n / 2 - 1; i >= 0; i--)
             heapify(n, i, arr);
 
-        // One by one extract elements from heap
         for (int i = n - 1; i > 0; i--) {
-            // Move current root to end
             int temp = arr[0];
             arr[0] = arr[i];
             arr[i] = temp;
             interchanges++;
 
             if (delayMs > 0) {
-                // Extracted max (root/end of array) -> green
                 greenIndices.add(i);
                 redIndices.clear();
                 yellowIndices.clear();
                 pauseAndRender();
             }
 
-            // call max heapify on the reduced heap
             heapify(i, 0, arr);
         }
 
@@ -41,27 +39,29 @@ public class HeapSort extends AbstractSortingAlgorithm {
         }
     }
 
+    // find largest among root, left child and right child and swap with root
+    // call recursively for the affected sub-tree
+    // n -> heap size
     public void heapify(int n, int i, int[] arr) {
-        int largest = i; // Initialize largest as root
-        int l = 2 * i + 1; // left = 2*i + 1
-        int r = 2 * i + 2; // right = 2*i + 2
+        int largest = i; // Initialize root
+        int l = 2 * i + 1;
+        int r = 2 * i + 2;
 
         if (delayMs > 0) {
-            // Root being heapified -> yellow
             yellowIndices.clear();
             yellowIndices.add(i);
         }
 
         // If left child is larger than root
+        // check if l exists in heap
         if (l < n) {
-            comparisons++;
             if (delayMs > 0) {
-                // Element being compared -> red
                 redIndices.clear();
                 redIndices.add(l);
                 pauseAndRender();
             }
 
+            comparisons++;
             if (arr[l] > arr[largest]) {
                 largest = l;
             }
@@ -88,7 +88,6 @@ public class HeapSort extends AbstractSortingAlgorithm {
             interchanges++;
 
             if (delayMs > 0) {
-                // Repaint after swap
                 redIndices.clear();
                 pauseAndRender();
             }

@@ -1,4 +1,4 @@
-package utils;
+package gui;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,10 +30,12 @@ public class SortVisualizer extends JPanel {
 
     @Override
     protected void paintComponent(Graphics g) {
-        // This clears the panel before drawing again
+        // clears panel
         super.paintComponent(g);
-        if (arr == null || arr.length == 0)
+
+        if (arr == null || arr.length == 0) {
             return;
+        }
 
         Graphics2D g2d = (Graphics2D) g;
 
@@ -48,17 +50,13 @@ public class SortVisualizer extends JPanel {
             }
         }
 
-        // Prevents 0 division
-        if (maxValue == 0)
-            maxValue = 1;
-
         int numBars = arr.length;
         double barWidth = (double) panelWidth / numBars;
 
         for (int i = 0; i < numBars; i++) {
             int barHeight = (int) (((double) arr[i] / maxValue) * panelHeight);
 
-            // Calculate bar's coords
+            // Calculate bar's coords (top left corner)
             int x = (int) (i * barWidth);
             int y = panelHeight - barHeight;
 

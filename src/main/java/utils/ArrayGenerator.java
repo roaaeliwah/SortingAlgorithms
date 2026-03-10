@@ -14,6 +14,19 @@ public class ArrayGenerator {
                 .toArray();
     }
 
+    public int[] generate(int size, String type) {
+        switch (type.toLowerCase()) {
+            case "sorted":
+                return generateSorted(size);
+            case "reverse":
+                return generateReverse(size);
+            case "random":
+                return generateRandom(size);
+            default:
+                throw new IllegalArgumentException("Invalid array type: " + type);
+        }
+    }
+
     public int[] generateSorted(int size) {
         int[] sorted = new int[size];
         for (int i = 1; i <= size; i++)

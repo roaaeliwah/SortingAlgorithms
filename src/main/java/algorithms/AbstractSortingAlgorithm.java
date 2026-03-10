@@ -1,6 +1,6 @@
 package algorithms;
 
-import utils.SortVisualizer;
+import gui.SortVisualizer;
 
 import javax.swing.SwingUtilities;
 import java.util.HashSet;
@@ -13,7 +13,6 @@ public abstract class AbstractSortingAlgorithm {
     Runnable onUpdate;
     protected SortVisualizer visualizer;
 
-    // sets are used for faster look up and uniqueness
     protected Set<Integer> redIndices = new HashSet<>();
     protected Set<Integer> yellowIndices = new HashSet<>();
     protected Set<Integer> greenIndices = new HashSet<>();
@@ -42,7 +41,6 @@ public abstract class AbstractSortingAlgorithm {
     }
 
     protected void pauseAndRender() {
-        // Push highlight state to visualizer
         if (visualizer != null) {
             visualizer.setHighlights(
                     new HashSet<>(redIndices),
@@ -55,7 +53,6 @@ public abstract class AbstractSortingAlgorithm {
             SwingUtilities.invokeLater(onUpdate);
         }
 
-        // ensures it doesn't sleep during comparison and only during visualization
         if (delayMs > 0) {
             try {
                 Thread.sleep(delayMs);

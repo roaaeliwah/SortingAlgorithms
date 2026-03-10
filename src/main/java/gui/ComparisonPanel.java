@@ -23,19 +23,17 @@ public class ComparisonPanel extends JPanel {
     private final JTextField runsField;
     private final JButton runButton;
     private final DefaultTableModel tableModel;
-
     private final JButton chooseFilesButton;
     private final JLabel filesLabel;
-
-    private File[] selectedFiles = null;
-
     private final JLabel minSizeLabel;
     private final JLabel maxSizeLabel;
 
-    private final ComparisonEngine engine;
-    private final SizeGenerator sizeGenerator = new SizeGenerator();
+    private File[] selectedFiles = null;
     private final String[] ALGORITHMS = { "Bubble", "Selection",
             "Insertion", "Merge", "Quick", "Heap" };
+
+    private final ComparisonEngine engine;
+    private final SizeGenerator sizeGenerator = new SizeGenerator();
 
     public ComparisonPanel() {
         engine = new ComparisonEngine();
@@ -43,10 +41,8 @@ public class ComparisonPanel extends JPanel {
 
         // Top Control Panel
         JPanel controlPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 10));
-
         controlPanel.add(new JLabel("Array Type:"));
 
-        // dropdown menu
         arrayTypeCombo = new JComboBox<>(new String[] { "Random", "Sorted", "Reverse", "File" });
         arrayTypeCombo.addActionListener(e -> onArrayTypeChanged());
         controlPanel.add(arrayTypeCombo);
@@ -69,7 +65,6 @@ public class ComparisonPanel extends JPanel {
         controlPanel.add(filesLabel);
 
         controlPanel.add(new JLabel("Runs:"));
-        // 4 -> box width
         runsField = new JTextField("5", 4);
         controlPanel.add(runsField);
 
@@ -81,7 +76,6 @@ public class ComparisonPanel extends JPanel {
         exportCsvButton.addActionListener(e -> exportToCSV());
         controlPanel.add(exportCsvButton);
 
-        // Hide file input controls by default ("Random" is the default selection)
         chooseFilesButton.setVisible(false);
         filesLabel.setVisible(false);
 
@@ -95,7 +89,7 @@ public class ComparisonPanel extends JPanel {
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // read-only table
+                return false;
             }
         };
         JTable resultsTable = new JTable(tableModel);
@@ -116,7 +110,7 @@ public class ComparisonPanel extends JPanel {
 
         JFileChooser chooser = new JFileChooser();
         chooser.setDialogTitle("Export to CSV");
-        chooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("CSV Files", "csv"));
+        chooser.setFileFilter(new FileNameExtensionFilter("CSV Files", "csv"));
 
         int result = chooser.showSaveDialog(this);
         if (result == JFileChooser.APPROVE_OPTION) {
@@ -141,10 +135,6 @@ public class ComparisonPanel extends JPanel {
                     for (int col = 0; col < tableModel.getColumnCount(); col++) {
                         Object val = tableModel.getValueAt(row, col);
                         String valueStr = (val == null) ? "" : val.toString();
-                        // Quote strings that contain commas
-                        if (valueStr.contains(",")) {
-                            valueStr = "\"" + valueStr + "\"";
-                        }
                         writer.print(valueStr);
                         if (col < tableModel.getColumnCount() - 1) {
                             writer.print(",");
@@ -179,11 +169,9 @@ public class ComparisonPanel extends JPanel {
         JFileChooser chooser = new JFileChooser();
         chooser.setMultiSelectionEnabled(true);
 
-        // Restrict to .txt files
         chooser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
         int result = chooser.showOpenDialog(this); // this: centers
 
-        // If user approves file selection, store the selected files and update the label
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFiles = chooser.getSelectedFiles();
             if (selectedFiles.length == 1) {
@@ -223,23 +211,16 @@ public class ComparisonPanel extends JPanel {
         SwingWorker<Void, SortResult> worker = new SwingWorker<Void, SortResult>() {
             @Override
             protected Void doInBackground() throws Exception {
-                // Load arrays from each file
                 Map<String, int[]> fileArrays = new LinkedHashMap<>();
                 for (File f : selectedFiles) {
-                    try {
-                        int[] arr = engine.generateFromFile(f.getAbsolutePath());
-                        fileArrays.put(f.getName(), arr);
-                    } catch (Exception ex) {
-                        // Skip files that fail to parse and notify later
-                        System.err.println("Failed to load file: " + f.getName() + " " + ex.getMessage());
-                    }
+                    int[] arr = engine.generateFromFile(f.getAbsolutePath());
+                    fileArrays.put(f.getName(), arr);
                 }
 
                 if (fileArrays.isEmpty()) {
                     return null;
                 }
 
-                // entrySet: returns a set of key, value
                 for (Map.Entry<String, int[]> entry : fileArrays.entrySet()) {
                     String fileName = entry.getKey();
                     int[] baseArray = entry.getValue();
@@ -292,14 +273,13 @@ public class ComparisonPanel extends JPanel {
                 return;
             }
 
-            runButton.setEnabled(false); // prevents input change when sorting is running
-            tableModel.setRowCount(0); // Clear previous results
+            runButton.setEnabled(false);
+            tableModel.setRowCount(0);
 
-            // Runs in a separate thread to keep UI responsive
             SwingWorker<Void, SortResult> worker = new SwingWorker<Void, SortResult>() {
                 @Override
                 protected Void doInBackground() throws Exception {
-                    // Pre-generate base arrays for all sizes
+                    // generate base arrays for all sizes
                     Map<Integer, int[]> baseArrays = new LinkedHashMap<>();
                     for (int size : sizes) {
                         baseArrays.put(size, engine.generate(size, type));
@@ -311,7 +291,6 @@ public class ComparisonPanel extends JPanel {
                         for (String algo : ALGORITHMS) {
                             SortResult result = engine.benchmark(algo, size, runs, baseArray);
                             result.arrayType = type;
-
                             publish(result);
                         }
                     }
@@ -338,7 +317,6 @@ public class ComparisonPanel extends JPanel {
 
                 @Override
                 protected void done() {
-
                     runButton.setEnabled(true);
                 }
             };

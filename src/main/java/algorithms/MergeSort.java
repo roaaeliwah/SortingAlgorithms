@@ -13,13 +13,10 @@ public class MergeSort extends AbstractSortingAlgorithm {
         }
         mergeSort(0, arr.length - 1, arr);
 
-        if (delayMs > 0) {
-            redIndices.clear();
-            yellowIndices.clear();
-            for (int i = 0; i < arr.length; i++)
-                greenIndices.add(i);
+        for (int i = 0; i < arr.length; i++)
+            greenIndices.add(i);
+        if (delayMs > 0)
             pauseAndRender();
-        }
     }
 
     public void mergeSort(int l, int r, int[] arr) {
@@ -33,6 +30,8 @@ public class MergeSort extends AbstractSortingAlgorithm {
     }
 
     public void merge(int l, int m, int r, int[] arr) {
+        yellowIndices.clear();
+
         int[] left = new int[m - l + 1];
         int[] right = new int[r - m];
 
@@ -49,20 +48,12 @@ public class MergeSort extends AbstractSortingAlgorithm {
         ctrL = 0;
         int ctr = l;
 
-        if (delayMs > 0) {
-            yellowIndices.clear();
-            for (int i = l; i <= r; i++)
-                yellowIndices.add(i);
-        }
+        for (int i = l; i <= r; i++)
+            yellowIndices.add(i);
 
         while (ctrL < left.length && ctrR < right.length) {
             comparisons++;
             interchanges++;
-
-            if (delayMs > 0) {
-                redIndices.clear();
-                redIndices.add(ctr);
-            }
 
             if (left[ctrL] <= right[ctrR]) {
                 arr[ctr++] = left[ctrL++];
@@ -75,24 +66,20 @@ public class MergeSort extends AbstractSortingAlgorithm {
 
         while (ctrL < left.length) {
             interchanges++;
-            redIndices.clear();
-            redIndices.add(ctr);
             arr[ctr++] = left[ctrL++];
             if (delayMs > 0)
                 pauseAndRender();
         }
         while (ctrR < right.length) {
             interchanges++;
-            redIndices.clear();
-            redIndices.add(ctr);
             arr[ctr++] = right[ctrR++];
             if (delayMs > 0)
                 pauseAndRender();
         }
-        if (delayMs > 0) {
-            redIndices.clear();
-            yellowIndices.clear();
+
+        // Merge for this window is complete.
+        yellowIndices.clear();
+        if (delayMs > 0)
             pauseAndRender();
-        }
     }
 }

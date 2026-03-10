@@ -6,13 +6,14 @@ public class QuickSort extends AbstractSortingAlgorithm {
     public void sort(int[] arr) {
         comparisons = 0;
         interchanges = 0;
-        if (delayMs > 0)
+        if (delayMs > 0) {
             greenIndices.clear();
+            redIndices.clear();
+            yellowIndices.clear();
+        }
         quickSort(0, arr.length - 1, arr);
 
         if (delayMs > 0) {
-            redIndices.clear();
-            yellowIndices.clear();
             for (int i = 0; i < arr.length; i++)
                 greenIndices.add(i);
             pauseAndRender();
@@ -25,9 +26,10 @@ public class QuickSort extends AbstractSortingAlgorithm {
             quickSort(low, pi - 1, arr);
             quickSort(pi + 1, high, arr);
         } else if (low == high) {
-            greenIndices.add(low);
-            if (delayMs > 0)
+            if (delayMs > 0) {
+                greenIndices.add(low);
                 pauseAndRender();
+            }
         }
     }
 
@@ -36,7 +38,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
         int i = low - 1;
 
         if (delayMs > 0) {
-            // Pivot -> yellow
             yellowIndices.clear();
             yellowIndices.add(high);
         }
@@ -45,7 +46,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
             comparisons++;
 
             if (delayMs > 0) {
-                // Element being compared -> red
                 redIndices.clear();
                 redIndices.add(j);
                 pauseAndRender();
@@ -68,7 +68,6 @@ public class QuickSort extends AbstractSortingAlgorithm {
         interchanges++;
 
         if (delayMs > 0) {
-            // When partition finished -> pivot's final position is green
             redIndices.clear();
             yellowIndices.clear();
             greenIndices.add(i + 1);

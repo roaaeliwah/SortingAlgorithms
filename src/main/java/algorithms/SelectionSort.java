@@ -14,8 +14,6 @@ public class SelectionSort extends AbstractSortingAlgorithm {
 
             // to find minimum's index
             for (int j = i + 1; j < arr.length; j++) {
-                comparisons++;
-
                 if (delayMs > 0) {
                     yellowIndices.clear();
                     yellowIndices.add(min);
@@ -24,6 +22,7 @@ public class SelectionSort extends AbstractSortingAlgorithm {
                     pauseAndRender();
                 }
 
+                comparisons++;
                 if (arr[j] < arr[min]) {
                     min = j;
                 }

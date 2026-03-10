@@ -2,49 +2,24 @@ package logic;
 
 import algorithms.AbstractSortingAlgorithm;
 import utils.ArrayGenerator;
+import utils.SorterFactory;
 
 import java.io.IOException;
 
 public class ComparisonEngine {
     private final ArrayGenerator generator = new ArrayGenerator();
+    private final SorterFactory sorterFactory = new SorterFactory();
 
     public int[] generateFromFile(String filePath) throws IOException {
         return generator.loadFromFile(filePath);
     }
-    public int[] generate(int size, String type) {
-        switch (type.toLowerCase()) {
-            case "sorted":
-                return generator.generateSorted(size);
-            case "reverse":
-                return generator.generateReverse(size);
-            case "random":
-                return generator.generateRandom(size);
-            default:
-                throw new IllegalArgumentException("Invalid array type: " + type);
-        }
-    }
 
-    private AbstractSortingAlgorithm createSortingAlgorithm(String name) {
-        switch (name.toLowerCase()) {
-            case "bubble":
-                return new algorithms.BubbleSort();
-            case "insertion":
-                return new algorithms.InsertionSort();
-            case "selection":
-                return new algorithms.SelectionSort();
-            case "quick":
-                return new algorithms.QuickSort();
-            case "merge":
-                return new algorithms.MergeSort();
-            case "heap":
-                return new algorithms.HeapSort();
-            default:
-                throw new IllegalArgumentException("Invalid sorting algorithm: " + name);
-        }
+    public int[] generate(int size, String type) {
+        return generator.generate(size, type);
     }
 
     public SortResult benchmark(String algorithmName, int size, int runs, int[] baseArray) {
-        AbstractSortingAlgorithm sorter = createSortingAlgorithm(algorithmName);
+        AbstractSortingAlgorithm sorter = sorterFactory.createSorter(algorithmName);
         SortResult result = new SortResult();
 
         result.algorithmName = algorithmName;

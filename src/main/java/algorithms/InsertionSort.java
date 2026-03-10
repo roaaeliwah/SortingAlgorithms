@@ -15,29 +15,27 @@ public class InsertionSort extends AbstractSortingAlgorithm {
             int j = i - 1;
 
             if (delayMs > 0) {
-                // Current key element being inserted -> red
-                redIndices.clear();
-                redIndices.add(i);
                 yellowIndices.clear();
+                yellowIndices.add(i);
                 pauseAndRender();
             }
 
             for (; j >= 0; j--) {
-                comparisons++;
-
                 if (delayMs > 0) {
-                    // Element being compared/shifted -> red
                     redIndices.clear();
                     redIndices.add(j);
                     pauseAndRender();
                 }
 
+                comparisons++;
                 if (arr[j] > tmp) {
                     interchanges++;
                     arr[j + 1] = arr[j];
-                    // Repaint after shift
-                    if (delayMs > 0)
+                    if (delayMs > 0) {
+                        yellowIndices.clear();
+                        yellowIndices.add(j);
                         pauseAndRender();
+                    }
                 } else {
                     break;
                 }

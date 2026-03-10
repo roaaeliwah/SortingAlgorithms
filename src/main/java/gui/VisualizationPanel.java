@@ -2,7 +2,6 @@ package gui;
 
 import algorithms.AbstractSortingAlgorithm;
 import logic.ComparisonEngine;
-import utils.SortVisualizer;
 import utils.SorterFactory;
 
 import javax.swing.*;
@@ -11,6 +10,7 @@ import java.awt.*;
 import java.io.File;
 
 public class VisualizationPanel extends JPanel {
+    // UI Components
     private final JComboBox<String> algoCombo;
     private final JSlider speedSlider;
     private final JButton startButton;
@@ -20,17 +20,19 @@ public class VisualizationPanel extends JPanel {
     private final JLabel sizeLabel;
     private final JButton chooseFileButton;
     private final JLabel fileLabel;
+
     private Thread sortThread;
-    private final ComparisonEngine engine = new ComparisonEngine();
     private int[] array;
+    private File selectedFile;
+
+    private final ComparisonEngine engine = new ComparisonEngine();
     private final SorterFactory sorterFactory = new SorterFactory();
     private SortVisualizer visualizer = new SortVisualizer();
-    private File selectedFile;
 
     public VisualizationPanel() {
         setLayout(new BorderLayout());
 
-        // Top Control Panel - Use a two-row panel to fit all controls comfortably
+        // Two row panel
         JPanel controlPanel = new JPanel(new GridLayout(2, 1, 5, 5));
 
         JPanel row1 = new JPanel(new FlowLayout(FlowLayout.LEFT, 15, 5));
@@ -39,7 +41,7 @@ public class VisualizationPanel extends JPanel {
         row1.add(algoCombo);
 
         row1.add(new JLabel("Speed:"));
-        speedSlider = new JSlider(1, 200, 50); // Delay in ms: 1 is fast, 100 is slow
+        speedSlider = new JSlider(1, 200, 50); // Delay in ms: 1 is fast, 200 is slow
 
         // ticks spacing
         speedSlider.setMajorTickSpacing(20);
@@ -48,6 +50,8 @@ public class VisualizationPanel extends JPanel {
 
         row1.add(new JLabel("Type:"));
         arrayTypeCombo = new JComboBox<>(new String[] { "Random", "Sorted", "Reverse", "File" });
+
+        // distinguish files from generated arrays
         arrayTypeCombo.addActionListener(e -> onArrayTypeChanged());
         row1.add(arrayTypeCombo);
 
@@ -70,21 +74,18 @@ public class VisualizationPanel extends JPanel {
 
         controlPanel.add(row1);
         controlPanel.add(row2);
-
         add(controlPanel, BorderLayout.NORTH);
 
-        // Center Drawing Panel
         visualizer = new SortVisualizer();
         add(visualizer, BorderLayout.CENTER);
 
-        // Bottom Stats Panel
         JPanel statsPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         statsLabel = new JLabel("Comparisons: 0 | Interchanges: 0");
         statsLabel.setFont(new Font("Arial", Font.BOLD, 14));
         statsPanel.add(statsLabel);
         add(statsPanel, BorderLayout.SOUTH);
 
-        // File controls are only relevant when "File" input type is selected.
+        // Only displayed when "File" is selected
         chooseFileButton.setVisible(false);
         fileLabel.setVisible(false);
     }
@@ -99,8 +100,11 @@ public class VisualizationPanel extends JPanel {
 
     private void chooseFile() {
         JFileChooser chooser = new JFileChooser();
+        // limits files
         chooser.setFileFilter(new FileNameExtensionFilter("Text/CSV Files", "txt", "csv"));
         int result = chooser.showOpenDialog(this);
+
+        // returned if click "open"
         if (result == JFileChooser.APPROVE_OPTION) {
             selectedFile = chooser.getSelectedFile();
             fileLabel.setText(selectedFile.getName());
@@ -108,11 +112,8 @@ public class VisualizationPanel extends JPanel {
     }
 
     private void startVisualization() {
-        // called when the start button is clicked.
-        // read the selected algorithm, speed, array type, and size,
-        // generate the appropriate array, and then start the visualization.
         if (sortThread != null && sortThread.isAlive()) {
-            return; // already running
+            return;
         }
 
         String type = (String) arrayTypeCombo.getSelectedItem();
@@ -144,7 +145,6 @@ public class VisualizationPanel extends JPanel {
                         JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            assert type != null;
             array = engine.generate(size, type);
         }
 
@@ -163,10 +163,9 @@ public class VisualizationPanel extends JPanel {
         visualizer.setArray(array);
 
         // Instantiate the sorter
-        assert algoName != null;
         AbstractSortingAlgorithm sorter = SorterFactory.createSorter(algoName);
         sorter.setStepDelay(speed);
-        sorter.setVisualizer(visualizer); // Hook up the visualizer for color-coding
+        sorter.setVisualizer(visualizer);
         sorter.setOnUpdate(() -> {
             visualizer.repaint();
         });
@@ -174,8 +173,6 @@ public class VisualizationPanel extends JPanel {
         sortThread = new Thread(() -> {
             sorter.sort(array);
 
-            // Re-enable controls and show final stats.
-            // Keep final highlights visible so users can see the finished state.
             SwingUtilities.invokeLater(() -> {
                 visualizer.repaint();
                 statsLabel.setText(String.format("Comparisons: %d | Interchanges: %d",
