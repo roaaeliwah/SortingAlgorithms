@@ -78,6 +78,7 @@ Divides the input list into a sorted and an unsorted sublist, repeatedly selecti
 - **Time Complexity**: $O(n^2)$ in all cases.
 
 *Demo video for Selection Sort*
+
 https://github.com/user-attachments/assets/a497d814-f515-4e67-bc82-4d3db49d5838
 
 
@@ -86,6 +87,7 @@ Builds the final sorted array one item at a time. It is highly efficient for sma
 - **Time Complexity**: $O(n^2)$ average/worst case, $O(n)$ best case.
 
 *Demo video for Insertion Sort*
+
 https://github.com/user-attachments/assets/a54b5ba8-3f1a-495a-92d5-5c072bf3583a
 
 
@@ -94,6 +96,7 @@ An efficient, stable, divide-and-conquer algorithm that divides the array into h
 - **Time Complexity**: $O(n \log n)$ in all cases.
 
 *Demo video for Merge Sort*
+
 https://github.com/user-attachments/assets/37fa6797-edd2-4cf0-b408-e8a6c203e42d
 
 
@@ -102,6 +105,7 @@ A highly efficient divide-and-conquer algorithm that partitions the array based 
 - **Time Complexity**: $O(n^2)$ worst case, $O(n \log n)$ average/best case.
 
 *Demo video for Quick Sort*
+
 https://github.com/user-attachments/assets/2817ac25-49e7-4fcb-b42e-e265099ee09f
 
 
@@ -110,6 +114,7 @@ A comparison-based sorting technique based on a Binary Heap data structure. It o
 - **Time Complexity**: $O(n \log n)$ in all cases.
 
 *Demo video for Heap Sort*
+
 https://github.com/user-attachments/assets/186e5a7f-b0ef-406e-a960-ac44dde4ff98
 
 
